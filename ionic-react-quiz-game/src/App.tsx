@@ -71,15 +71,15 @@ function verifyAnswers() {
       return; 
     }     
   
+  setScore(0);
+
   for (let i = 0; i < quizAnswers.length; i++) {
     if (quizAnswers[i] === answers [i])
       setScore(prevCount => prevCount + 1);
   }
-
   setShowResult(true);
 }
 
-console.log(score);
 
 return (
     <IonApp>
@@ -92,7 +92,7 @@ return (
         fourthAnswerRef={fourthAnswerRef}
         fifthAnswerRef={fifthAnswerRef}
       />
-      {showResult && <Result />}
+      {showResult && <Result score={score}/>}
     </IonApp>
   );
 };
