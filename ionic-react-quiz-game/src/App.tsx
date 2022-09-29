@@ -1,6 +1,7 @@
 import { 
   IonApp, 
-  setupIonicReact 
+  setupIonicReact, 
+  useIonAlert
 } from '@ionic/react';
 
 
@@ -26,14 +27,67 @@ import './theme/variables.css';
 /* Components */
 import Header from './components/Header';
 import Main from './components/Main';
+import Result from './components/Results';
+import { useRef, useState } from 'react';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <Header />
-    <Main />
-  </IonApp>
-);
+const App: React.FC = () => {
+
+const [showResult, setShowResult] = useState(false);
+const firstAnswerRef = useRef<HTMLIonInputElement>(null);
+const secondAnswerRef = useRef<HTMLIonInputElement>(null);
+const thirdAnswerRef = useRef<HTMLIonInputElement>(null);
+const fourthAnswerRef = useRef<HTMLIonInputElement>(null);
+const fifthAnswerRef = useRef<HTMLIonInputElement>(null);
+
+const [presentAlert] = useIonAlert();
+
+let count = 0;
+function verifyAnswers() {
+  const firstAnswer = firstAnswerRef.current!.value;
+  const secondAnswer = secondAnswerRef.current!.value;
+  const thirdAnswer = thirdAnswerRef.current!.value;
+  const fourthAnswer = fourthAnswerRef.current!.value;
+  const fifthAnswer = fifthAnswerRef.current!.value;
+
+  if (!firstAnswer || 
+    !secondAnswer || 
+    !thirdAnswer || 
+    !fourthAnswer || 
+    !fifthAnswer) {
+      presentAlert({
+        header: 'Warning',
+        subHeader: 'Make sure to write valid answers.',
+        message: 'Do not leave blank fields!',
+        buttons: ['OK'],
+      });
+      setShowResult(false);
+      return; 
+    }     
+       
+  setShowResult(true);
+
+
+}
+
+
+return (
+    <IonApp>
+      <Header />
+      <Main 
+        verifyAnswers={verifyAnswers}
+        firstAnswerRef={firstAnswerRef}
+        secondAnswerRef={secondAnswerRef}
+        thirdAnswerRef={thirdAnswerRef}
+        fourthAnswerRef={fourthAnswerRef}
+        fifthAnswerRef={fifthAnswerRef}
+      />
+      {showResult && <Result />}
+    </IonApp>
+  );
+};
+
+
 
 export default App;
