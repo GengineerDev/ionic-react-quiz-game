@@ -35,6 +35,8 @@ setupIonicReact();
 const App: React.FC = () => {
 
 const [showResult, setShowResult] = useState(false);
+const [score, setScore] = useState(0);
+
 const firstAnswerRef = useRef<HTMLIonInputElement>(null);
 const secondAnswerRef = useRef<HTMLIonInputElement>(null);
 const thirdAnswerRef = useRef<HTMLIonInputElement>(null);
@@ -51,6 +53,9 @@ function verifyAnswers() {
   const fourthAnswer = fourthAnswerRef.current!.value;
   const fifthAnswer = fifthAnswerRef.current!.value;
 
+  let quizAnswers = [firstAnswer, secondAnswer, thirdAnswer, fourthAnswer, fifthAnswer];
+  const answers = ['3', '4', 'Philippines', 'Facebook', 'Ionic']
+
   if (!firstAnswer || 
     !secondAnswer || 
     !thirdAnswer || 
@@ -65,12 +70,16 @@ function verifyAnswers() {
       setShowResult(false);
       return; 
     }     
-       
+  
+  for (let i = 0; i < quizAnswers.length; i++) {
+    if (quizAnswers[i] === answers [i])
+      setScore(prevCount => prevCount + 1);
+  }
+
   setShowResult(true);
-
-
 }
 
+console.log(score);
 
 return (
     <IonApp>
